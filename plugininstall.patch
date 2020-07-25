@@ -9,3 +9,14 @@
              pass
          try:
              if self.db.get('oem-config/enable') == 'true':
+--- plugininstall.py-org        2020-07-26 01:28:34.448367662 +0300
++++ plugininstall.py    2020-07-26 01:54:05.540892426 +0300
+@@ -1334,6 +1334,9 @@
+                 targetpath = os.path.join(target, relpath)
+                 st = os.lstat(sourcepath)
+ 
++                if target.startswith("/target/swapfile"):
++                    continue
++
+                 # Remove the target if necessary and if we can.
+                 install_misc.remove_target(source, target, relpath, st)

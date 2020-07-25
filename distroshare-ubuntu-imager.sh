@@ -78,10 +78,10 @@ apt-get -q=2 install xorriso squashfs-tools dmraid lvm2 samba-common
 
 GRUB2_INSTALLED=`apt-cache policy grub-pc | grep Installed | grep -v none`
 #EFI support requires a different grub version. 
-if [ "$EFI" == "YES" ]
+if [ "$EFI" = "YES" ]
 then
     ARCH=`/usr/bin/arch`
-    if [ "$ARCH" == "x86_64" ]
+    if [ "$ARCH" = "x86_64" ]
     then 
 	apt-get -q=2 install grub-efi-amd64
     else
@@ -94,7 +94,7 @@ fi
 
 echo "Installing Ubiquity"
 apt-get -q=2 install casper lupin-casper
-if [ "$GTK" == "YES" ]; then
+if [ "$GTK" = "YES" ]; then
    apt-get -q=2 install ubiquity-frontend-gtk
 else
    apt-get -q=2 install ubiquity-frontend-kde
@@ -117,7 +117,7 @@ patch < ubiquity.patch
 cp ubiquity /usr/bin/
 rm -f ubiquity
 
-if [ "$GTK" == "YES" ]
+if [ "$GTK" = "YES" ]
 then
     echo "Patching Ubiquity Gtk Frontend to make the dialogs smaller"
     cp /usr/lib/ubiquity/ubiquity/frontend/gtk_ui.py .
@@ -126,7 +126,7 @@ then
     rm -f gtk_ui.py
 fi
 
-if [ "$DISTROSHARE_UPDATER" == "YES" ]
+if [ "$DISTROSHARE_UPDATER" = "YES" ]
 then
    echo "Patching Ubiquity to rsync skel files from distroshare updater"
    cp /usr/lib/ubiquity/user-setup/user-setup-apply .
@@ -140,6 +140,9 @@ then
    cp user-setup-apply /usr/lib/user-setup/user-setup-apply
    rm -f user-setup-apply
 fi
+
+echo "Setup done... crtl-d to continue"
+cat
 
 #Copy the filesystem
 echo "Copying the current system to the new directories"
@@ -377,7 +380,7 @@ echo "export FLAVOUR=\"${DISTRIB_ID}\"" >> /etc/casper.conf
 
 echo "Setting up display manager for autologin if needed"
 #Testing for MDM and applying specific changes for it
-if [ "${DM}" == "MDM" ]; then
+if [ "${DM}" = "MDM" ]; then
     sed -i 's/gdm\/custom.conf/mdm\/mdm.conf/' \
 /usr/share/initramfs-tools/scripts/casper-bottom/15autologin
     mkdir -p /etc/mdm
@@ -391,7 +394,7 @@ if [ "${DM}" == "MDM" ]; then
 fi
 
 #Testing for GDM and applying specific changes for it
-if [ "${DM}" == "GDM" ]; then
+if [ "${DM}" = "GDM" ]; then
     mkdir -p /etc/gdm
     echo "[daemon]
 #AutomaticLoginEnable = false
@@ -400,7 +403,7 @@ if [ "${DM}" == "GDM" ]; then
 " > /etc/gdm/custom.conf
 fi
 
-if [ "${DM}" == "KDM" ]; then
+if [ "${DM}" = "KDM" ]; then
     mkdir -p /etc/kde4/kdm
     echo "[X-:0-Core]
 AutoLoginEnable=false
@@ -409,7 +412,7 @@ AutoReLogin=false
 " > /etc/kde4/kdm/kdmrc
 fi
 
-if [ "${DM}" == "LIGHTDM_UBUNTU_MATE" ]; then
+if [ "${DM}" = "LIGHTDM_UBUNTU_MATE" ]; then
  sed -i 's/\/etc\/lightdm\/lightdm.conf/\/usr\/share\/lightdm\/lightdm.conf.d\/60-lightdm-gtk-greeter.conf/' \
 /usr/share/initramfs-tools/scripts/casper-bottom/15autologin
 
@@ -417,7 +420,7 @@ if [ "${DM}" == "LIGHTDM_UBUNTU_MATE" ]; then
 /usr/share/initramfs-tools/scripts/casper-bottom/15autologin
 fi
 
-if [ "${DM}" == "LIGHTDM_ZORIN" ]; then
+if [ "${DM}" = "LIGHTDM_ZORIN" ]; then
  echo "[SeatDefaults]
 user-session=zorin_desktop
 " > /etc/lightdm/lightdm.conf
@@ -426,7 +429,7 @@ user-session=zorin_desktop
 /usr/share/initramfs-tools/scripts/casper-bottom/15autologin
 fi
 
-if [ "${DM}" == "LIGHTDM_KODIBUNTU" ]; then
+if [ "${DM}" = "LIGHTDM_KODIBUNTU" ]; then
  echo "[SeatDefaults]
 xserver-command=/usr/bin/X -bs -nolisten tcp
 user-session=kodi
@@ -438,7 +441,7 @@ greeter-session=lightdm-gtk-greeter
 /usr/share/initramfs-tools/scripts/casper-bottom/15autologin
 fi
 
-if [ "${DM}" == "LIGHTDM_DEEPIN" ]; then
+if [ "${DM}" = "LIGHTDM_DEEPIN" ]; then
  echo "[SeatDefaults]
 greeter-session=lightdm-deepin-greeter
 user-session=deepin
@@ -543,7 +546,7 @@ if [ -n "$EXTRA_PKGS" ]; then
    apt-get -q=2 remove "$EXTRA_PKGS"
 fi
 
-if [ -n "$GRUB2_INSTALLED" -a "$EFI" == "YES" ]
+if [ -n "$GRUB2_INSTALLED" -a "$EFI" = "YES" ]
 then
     sudo apt-get install grub-pc
 fi
