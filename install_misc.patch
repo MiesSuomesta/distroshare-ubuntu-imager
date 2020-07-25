@@ -1,0 +1,12 @@
+--- install_misc.py	2020-07-26 02:49:04.482577457 +0300
++++ install_misc.py-mod	2020-07-26 02:48:40.106130126 +0300
+@@ -754,6 +754,9 @@
+ 
+ 
+ def copy_file(db, sourcepath, targetpath, md5_check):
++    if targetpath.startswith("/target/swapfile"):
++        return
++
+     while 1:
+         if md5_check:
+             sourcehash = hashlib.md5()

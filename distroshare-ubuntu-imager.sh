@@ -141,6 +141,11 @@ then
    rm -f user-setup-apply
 fi
 
+cp /usr/lib/ubiquity/ubiquity/install_misc.py .
+patch < install_misc.patch
+cp install_misc.py /usr/lib/ubiquity/ubiquity/install_misc.py
+rm install_misc.py
+
 echo "Setup done... crtl-d to continue"
 cat
 
